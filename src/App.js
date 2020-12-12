@@ -1,24 +1,21 @@
-import logo from "./logo.svg";
 import "./App.css";
+import NavBar from "./components/NavBar";
+import { Switch, Route } from "react-router-dom";
+
+import { Entradas, AgregarEntrada } from "./components/EntradaProducto";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <NavBar />
+
+      <div className="container " style={{ marginTop: "5vh" }}>
+        <Switch>
+          <Route exact path="/entries" component={Entradas} />
+          <Route exact path="/entries/add" component={AgregarEntrada} />
+        </Switch>
+      </div>
+    </>
   );
 }
 
