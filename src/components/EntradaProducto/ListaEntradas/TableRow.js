@@ -1,6 +1,8 @@
 import React from "react";
-import { Button } from "react-materialize";
-import { Td } from "./productosStyles";
+import { Td } from "../../Styles";
+import { ModalActualizar } from "./ModalActualizar";
+import { ModalEliminar } from "./ModalEliminar";
+
 const TableRow = ({ item }) => {
   return (
     <tr key={item.id}>
@@ -12,26 +14,9 @@ const TableRow = ({ item }) => {
       <Td>{item.analista}</Td>
       <Td>{item.fecha}</Td>
       <Td style={{ width: "12vw" }}>
-        <Button
-          small
-          style={{
-            backgroundColor: "#ffc107",
-            color: "#212529",
-            borderRadius: "4px",
-          }}
-        >
-          Actualizar
-        </Button>
-        <Button
-          small
-          style={{
-            marginLeft: "8px",
-            borderRadius: "4px",
-            backgroundColor: "#dc3545",
-          }}
-        >
-          Eliminar
-        </Button>
+        <ModalActualizar item={item} />
+
+        <ModalEliminar item={item} />
       </Td>
     </tr>
   );

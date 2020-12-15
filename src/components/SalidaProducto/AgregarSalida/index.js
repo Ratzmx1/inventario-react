@@ -53,17 +53,13 @@ const AgregarEntrada = () => {
         Registrar entrada de productos
       </h1>
       <div style={{ marginLeft: "15%", marginRight: "15%" }}>
-        <SearchContainer>
-          <Input type="number" placeholder="Numero de Orden" />
-        </SearchContainer>
         <fieldset
           style={{
             borderRadius: "8px",
             border: "1px solid #bbb",
-            marginTop: "20px ",
           }}
         >
-          <legend style={{ padding: "0px 5px", color: "#aaa" }}>
+          <legend style={{ padding: "0px 5px", color: "#bbb" }}>
             Producto
           </legend>
           <Autocomplete
@@ -103,58 +99,9 @@ const AgregarEntrada = () => {
             }}
           />
         </fieldset>
-
         <SearchContainer>
           <Input type="number" placeholder="Cantidad" />
         </SearchContainer>
-
-        <fieldset
-          style={{
-            borderRadius: "8px",
-            border: "1px solid #bbb",
-            marginTop: "20px ",
-          }}
-        >
-          <legend style={{ padding: "0px 5px", color: "#aaa" }}>
-            Proveedor
-          </legend>
-          <Autocomplete
-            items={products}
-            getItemValue={(item) => item.nombre}
-            renderItem={(item, isHighlighted) => (
-              <div
-                style={{
-                  background: isHighlighted ? "lightgray" : "white",
-                  border: "1px solid #bbb",
-                  margin: "5px 0px",
-                  padding: "2px 10px",
-                  borderRadius: "8px",
-                }}
-              >
-                {`${item.id} - ${item.nombre} - ${item.marca}`}
-              </div>
-            )}
-            value={productSelected}
-            onChange={(e) => setProdSel(e.target.value)}
-            onSelect={(val, item) => {
-              setProdSel(val);
-              setidProdSel(item.id);
-            }}
-            menuStyle={{
-              outline: "none",
-              width: "100%",
-              paddingLeft: "15px",
-              paddingRight: "15px",
-            }}
-            wrapperStyle={{
-              outline: "none !important",
-              border: "none !important",
-              width: "100%",
-              padding: "0px 0.5vw",
-              boxShadow: "none !important",
-            }}
-          />
-        </fieldset>
 
         <ButtonAgregar style={{ marginBottom: "2vh" }}>Insertar</ButtonAgregar>
       </div>

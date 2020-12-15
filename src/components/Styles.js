@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Table as Tab, Button } from "react-materialize";
 import { Link as Li } from "react-router-dom";
+import Auto from "react-autocomplete";
 
 export const Th = styled.th`
   border: none;
@@ -20,7 +21,7 @@ export const Table = styled(Tab)`
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
 `;
 
-export const SearchInput = styled.input`
+export const Input = styled.input`
   border: none !important;
   width: 100%;
   margin-left: 10px !important;
@@ -66,4 +67,17 @@ export const ButtonAgregar = styled(Button)`
 export const Link = styled(Li)`
   text-decoration: none;
   color: white;
+`;
+
+export const CardContainer = styled.div`
+  border: 1px solid #ddd;
+  background-color: #fff;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin: auto;
+  width: 40vw;
+`;
+
+export const Autocomplete = styled(Auto)`
+  padding-left: 30px !important;
 `;

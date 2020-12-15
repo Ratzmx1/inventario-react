@@ -5,12 +5,12 @@ import { Row, Col, Select } from "react-materialize";
 import {
   Th,
   Table,
-  SearchInput,
+  Input,
   Icon,
   SearchContainer,
   ButtonAgregar,
   Link,
-} from "./productosStyles";
+} from "../../Styles";
 
 const Entradas = () => {
   const [products, setProducts] = useState([
@@ -149,7 +149,7 @@ const Entradas = () => {
       </h1>
 
       <Row style={{ height: "35px" }}>
-        <Col s={2} offset="s5">
+        <Col s={2} offset="s4">
           <Select
             onChange={(v) => {
               setOrder(v.target.value);
@@ -168,7 +168,7 @@ const Entradas = () => {
         </Col>
         <Col s={3}>
           <SearchContainer>
-            <SearchInput
+            <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Busqueda"
@@ -176,10 +176,10 @@ const Entradas = () => {
             <Icon className="fas fa-search" />
           </SearchContainer>
         </Col>
-        <Col s={2}>
-          <ButtonAgregar>
-            <Link to="/entries/add">Agregar Entrada</Link>
-          </ButtonAgregar>
+        <Col s={3}>
+          <Link to="/entries/add">
+            <ButtonAgregar>Agregar Entrada de Producto</ButtonAgregar>
+          </Link>
         </Col>
       </Row>
       <Table responsive hoverable striped>
