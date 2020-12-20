@@ -58,7 +58,7 @@ export const ButtonAgregar = styled(Button)`
   background-color: #663cc0;
   margin-top: 20px;
   height: 43px;
-  border-radius: 10px;
+  border-radius: 11px;
   &:hover {
     background-color: #663cc0;
   }
