@@ -7,10 +7,13 @@ import {
   Autocomplete,
 } from "../../Styles";
 
+// import axios from "axios"
+
 const AgregarEntrada = () => {
   const [products, setProducts] = useState([]);
   const [productSelected, setProdSel] = useState();
   const [idProductSelected, setidProdSel] = useState();
+  const [cantidad, setCantidad] = useState();
 
   useEffect(() => {
     setProducts([
@@ -37,7 +40,11 @@ const AgregarEntrada = () => {
       },
     ]);
   }, []);
-  console.log(idProductSelected);
+
+  const handleSubmit = () => {
+    console.log(idProductSelected, parseInt(cantidad, 10));
+  };
+
   return (
     <CardContainer>
       <h1
@@ -55,7 +62,7 @@ const AgregarEntrada = () => {
       <div style={{ marginLeft: "15%", marginRight: "15%" }}>
         <fieldset
           style={{
-            borderRadius: "8px",
+            borderRadius: "4px",
             border: "1px solid #bbb",
           }}
         >
@@ -67,6 +74,7 @@ const AgregarEntrada = () => {
             getItemValue={(item) => item.nombre}
             renderItem={(item, isHighlighted) => (
               <div
+                key={item.id}
                 style={{
                   background: isHighlighted ? "lightgray" : "white",
                   border: "1px solid #bbb",
@@ -99,14 +107,28 @@ const AgregarEntrada = () => {
             }}
           />
         </fieldset>
-        <SearchContainer>
-          <Input type="number" placeholder="Cantidad" />
-        </SearchContainer>
+        <fieldset
+          style={{
+            borderRadius: "4px",
+            border: "1px solid #bbb",
+            marginTop: "8px",
+          }}
+        >
+          <legend style={{ padding: "0px 5px", color: "#bbb" }}>
+            Cantidad
+          </legend>
+          <Input
+            type="number"
+            value={cantidad}
+            onChange={(e) => setCantidad(e.target.value)}
+          />
+        </fieldset>
 
-        <ButtonAgregar style={{ marginBottom: "2vh" }}>Insertar</ButtonAgregar>
+        <ButtonAgregar style={{ marginBottom: "2vh" }} onClick={handleSubmit}>
+          Insertar
+        </ButtonAgregar>
       </div>
     </CardContainer>
   );
 };
-
 export default AgregarEntrada;

@@ -13,3 +13,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.login-dark {
+  height: 94vh;
+  background: url(./FondoLogin.jpg) 0 0 / cover #475d62;
+}

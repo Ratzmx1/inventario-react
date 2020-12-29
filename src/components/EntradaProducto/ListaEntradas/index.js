@@ -177,7 +177,7 @@ const Entradas = () => {
           </SearchContainer>
         </Col>
         <Col s={3}>
-          <Link to="/entries/add">
+          <Link to="/entradas/add">
             <ButtonAgregar>Agregar Entrada de Producto</ButtonAgregar>
           </Link>
         </Col>

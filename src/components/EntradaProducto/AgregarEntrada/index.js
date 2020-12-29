@@ -53,12 +53,21 @@ const AgregarEntrada = () => {
         Registrar entrada de productos
       </h1>
       <div style={{ marginLeft: "15%", marginRight: "15%" }}>
-        <SearchContainer>
-          <Input type="number" placeholder="Numero de Orden" />
-        </SearchContainer>
         <fieldset
           style={{
-            borderRadius: "8px",
+            borderRadius: "4px",
+            border: "1px solid #bbb",
+            marginTop: "20px ",
+          }}
+        >
+          <legend style={{ padding: "0px 5px", color: "#aaa" }}>
+            Numero de orden
+          </legend>
+          <Input type="number" />
+        </fieldset>
+        <fieldset
+          style={{
+            borderRadius: "4px",
             border: "1px solid #bbb",
             marginTop: "20px ",
           }}
@@ -76,7 +85,7 @@ const AgregarEntrada = () => {
                   border: "1px solid #bbb",
                   margin: "5px 0px",
                   padding: "2px 10px",
-                  borderRadius: "8px",
+                  borderRadius: "4px",
                 }}
               >
                 {`${item.id} - ${item.nombre} - ${item.marca}`}
@@ -104,13 +113,25 @@ const AgregarEntrada = () => {
           />
         </fieldset>
 
-        <SearchContainer>
+        <fieldset
+          style={{
+            borderRadius: "4px",
+            border: "1px solid #bbb",
+            marginTop: "20px ",
+          }}
+        >
+          <legend style={{ padding: "0px 5px", color: "#aaa" }}>
+            Cantidad
+          </legend>
+          <Input type="number" />
+        </fieldset>
+        {/* <SearchContainer>
           <Input type="number" placeholder="Cantidad" />
-        </SearchContainer>
+        </SearchContainer> */}
 
         <fieldset
           style={{
-            borderRadius: "8px",
+            borderRadius: "4px",
             border: "1px solid #bbb",
             marginTop: "20px ",
           }}
@@ -128,7 +149,7 @@ const AgregarEntrada = () => {
                   border: "1px solid #bbb",
                   margin: "5px 0px",
                   padding: "2px 10px",
-                  borderRadius: "8px",
+                  borderRadius: "4px",
                 }}
               >
                 {`${item.id} - ${item.nombre} - ${item.marca}`}
