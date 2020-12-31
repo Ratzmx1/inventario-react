@@ -16,7 +16,7 @@ export const ModalActualizar = ({ item }) => {
 
   const [products, setProducts] = useState([]);
   const [productSelected, setProdSel] = useState();
-  const [idProductSelected, setidProdSel] = useState();
+  const [idProductSelected, setIdProdSel] = useState();
 
   const [proveedores, setProveedores] = useState([]);
   const [provSel, setProvSel] = useState("");
@@ -182,7 +182,7 @@ export const ModalActualizar = ({ item }) => {
             onChange={(e) => setProdSel(e.target.value)}
             onSelect={(val, item) => {
               setProdSel(val);
-              setidProdSel(item.id_prod);
+              setIdProdSel(item.id_prod);
             }}
             menuStyle={{
               outline: "none",

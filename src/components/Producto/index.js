@@ -14,7 +14,7 @@ const AgregarProducto = () => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
 
-  const [SubCategorias, setSubCategorias] = useState([]);
+  const [SubCategories, setSubCategories] = useState([]);
   const [SubCat, setSubCat] = useState("");
   const [idSubCat, setIdSubCat] = useState(0);
 
@@ -42,14 +42,14 @@ const AgregarProducto = () => {
         window.location.reload();
       });
   };
-  console.log(SubCategorias);
+  console.log(SubCategories);
   useEffect(() => {
     axios
       .get(`${baseUrl}/subcategories/view`, {
         headers: { authorization: token },
       })
       .then((res) => res.data.data)
-      .then((data) => setSubCategorias(data.result))
+      .then((data) => setSubCategories(data.result))
       .catch((e) => {
         if (e.response.status === 401) {
           dispatch(setToken(""));
@@ -96,10 +96,10 @@ const AgregarProducto = () => {
           }}
         >
           <legend style={{ padding: "0px 5px", color: "#bbb" }}>
-            SubCategoria
+            Sub Categoría
           </legend>
           <Autocomplete
-            items={SubCategorias}
+            items={SubCategories}
             getItemValue={(item) => item.nombre_subcat}
             renderItem={(item, isHighlighted) => (
               <div
@@ -159,7 +159,7 @@ const AgregarProducto = () => {
           }}
         >
           <legend style={{ padding: "0px 5px", color: "#bbb" }}>
-            Stock Minimo
+            Stock Mínimo
           </legend>
           <Input
             type="number"

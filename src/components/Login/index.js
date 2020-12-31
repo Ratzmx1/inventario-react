@@ -15,7 +15,7 @@ import { setToken, setUser } from "../../redux/ActionCreators";
 
 // axios
 import Axios from "axios";
-import { baseUrl } from "../../shared/baseUrl";
+import { baseUrl } from "../../shared/";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -92,7 +92,7 @@ const Login = () => {
                 margin: "20px 0px 0px 0px",
               }}
             >
-              Sesion iniciada correctamente
+              Sesión iniciada correctamente
             </Chip>
           )}
           {logged === "-1" && (

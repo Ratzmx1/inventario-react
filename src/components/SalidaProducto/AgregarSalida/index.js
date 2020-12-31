@@ -19,7 +19,7 @@ const AgregarEntrada = () => {
 
   const [products, setProducts] = useState([]);
   const [productSelected, setProdSel] = useState("");
-  const [idProductSelected, setidProdSel] = useState(0);
+  const [idProductSelected, setIdProdSel] = useState(0);
 
   const [cantidad, setCantidad] = useState(0);
 
@@ -112,7 +112,7 @@ const AgregarEntrada = () => {
             onChange={(e) => setProdSel(e.target.value)}
             onSelect={(val, item) => {
               setProdSel(val);
-              setidProdSel(item.id_prod);
+              setIdProdSel(item.id_prod);
             }}
             menuStyle={{
               outline: "none",

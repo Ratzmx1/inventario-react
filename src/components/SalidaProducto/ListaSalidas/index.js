@@ -17,7 +17,7 @@ import {
 import axios from "axios";
 import { baseUrl } from "../../../shared/baseUrl";
 
-// Rediux
+// Redux
 
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setUser } from "../../../redux/ActionCreators";
@@ -80,7 +80,7 @@ const Salidas = () => {
             <Input
               // value={search}
               // onChange={(e) => setSearch(e.target.value)}
-              placeholder="Busqueda"
+              placeholder="Búsqueda"
             />
             <Icon className="fas fa-search" />
           </SearchContainer>

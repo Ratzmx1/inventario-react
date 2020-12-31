@@ -22,10 +22,10 @@ const NavBar = () => {
       >
         <Link to="/">Analistas de inventario</Link>
         <Link to="/productos">Productos</Link>
-        <Link to="/">Subcategorias</Link>
-        <Link to="/">Categorias</Link>
+        <Link to="/">Sub Categorías</Link>
+        <Link to="/">Categorías</Link>
         <Link to="/">Proveedores</Link>
-        <Link to="/logout">Cerrar Sesion</Link>
+        <Link to="/logout">Cerrar Sesión</Link>
       </Navbar>
     );
   } else if (user.rol === "ANALISTA") {
@@ -44,7 +44,7 @@ const NavBar = () => {
       >
         <Link to="/entradas">Entrada de productos</Link>
         <Link to="/salidas">Salida de productos</Link>
-        <Link to="/logout">Cerrar Sesion</Link>
+        <Link to="/logout">Cerrar Sesión</Link>
       </Navbar>
     );
   }
