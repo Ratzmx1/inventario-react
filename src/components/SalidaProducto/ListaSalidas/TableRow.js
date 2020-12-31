@@ -1,22 +1,39 @@
 import React from "react";
 import { Td } from "../../Styles";
-import { ModalActualizar } from "./ModalActualizar";
-import { ModalEliminar } from "./ModalEliminar";
+import { Button } from "react-materialize";
 
 const TableRow = ({ item }) => {
   return (
     <tr key={item.id}>
       <Td>{item.id}</Td>
-      <Td>{item.orden}</Td>
-      <Td>{item.producto}</Td>
+      <Td>{item.nombre}</Td>
       <Td>{item.cantidad}</Td>
-      <Td>{item.proveedor}</Td>
-      <Td>{item.analista}</Td>
+      <Td>{item.rut}</Td>
+      <Td>{item.nombres}</Td>
       <Td>{item.fecha}</Td>
       <Td style={{ width: "12vw" }}>
-        <ModalActualizar item={item} />
+        <Button
+          small
+          style={{
+            backgroundColor: "#ffc107",
+            borderRadius: "4px",
+            color: "#000",
+          }}
+        >
+          Actualizar
+        </Button>
 
-        <ModalEliminar item={item} />
+        <Button
+          small
+          style={{
+            backgroundColor: "#dc3545",
+            color: "#FFF",
+            borderRadius: "4px",
+            margin: "0px 5px",
+          }}
+        >
+          Eliminar
+        </Button>
       </Td>
     </tr>
   );

@@ -45,18 +45,23 @@ function App() {
           <Route exact path="/entradas">
             <Authenticated Componente={Entradas} rol="ANALISTA" />
           </Route>
+
           <Route exact path="/entradas/add">
             <Authenticated Componente={AgregarEntrada} rol="ANALISTA" />
           </Route>
+
           <Route exact path="/salidas">
             <Authenticated Componente={ListaSalidas} rol="ANALISTA" />
           </Route>
+
           <Route exact path="/salidas/add">
             <Authenticated Componente={AgregarSalida} rol="ANALISTA" />
           </Route>
+
           <Route exact path="/productos">
             <Authenticated Componente={AgregarProducto} rol="ADMINISTRADOR" />
           </Route>
+          
           <Route component={Login} />
         </Switch>
       </div>

@@ -3,45 +3,67 @@ import {
   ButtonAgregar,
   CardContainer,
   Input,
-  SearchContainer,
   Autocomplete,
 } from "../../Styles";
+import { Chip } from "react-materialize";
 
-// import axios from "axios"
+import { baseUrl } from "../../../shared/baseUrl";
+import axios from "axios";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUser } from "../../../redux/ActionCreators";
 
 const AgregarEntrada = () => {
-  const [products, setProducts] = useState([]);
-  const [productSelected, setProdSel] = useState();
-  const [idProductSelected, setidProdSel] = useState();
-  const [cantidad, setCantidad] = useState();
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
 
+  const [products, setProducts] = useState([]);
+  const [productSelected, setProdSel] = useState("");
+  const [idProductSelected, setidProdSel] = useState(0);
+
+  const [cantidad, setCantidad] = useState(0);
+
+  const [message, setMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+
+  // CONSULTA PRODUCTOS
   useEffect(() => {
-    setProducts([
-      {
-        id: 1,
-        nombre: "Zapato",
-        subCategoria: 1,
-        marca: "Pequeña lulu",
-        stockMinimo: 50,
-      },
-      {
-        id: 2,
-        nombre: "Chala",
-        subCategoria: 1,
-        marca: "Pequeña lulu",
-        stockMinimo: 50,
-      },
-      {
-        id: 3,
-        nombre: "Skate",
-        subCategoria: 2,
-        marca: "ConiFuentesArt",
-        stockMinimo: 50,
-      },
-    ]);
+    axios
+      .get(`${baseUrl}/products/view`, {
+        headers: { authorization: token },
+      })
+      .then((res) => res.data.data)
+      .then((data) => setProducts(data.result))
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
   }, []);
 
   const handleSubmit = () => {
+    axios
+      .post(
+        `${baseUrl}/outs/sacar_producto`,
+        { id_producto: idProductSelected, cantidad },
+        {
+          headers: { authorization: token },
+        }
+      )
+      .then(() => {
+        alert("Salida registrada correctamente");
+        window.location.replace("/salidas");
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        } else if (e.response.status === 404) {
+          setMessage(e.response.data.mensaje);
+          setShowAlert(true);
+        }
+      });
     console.log(idProductSelected, parseInt(cantidad, 10));
   };
 
@@ -71,10 +93,10 @@ const AgregarEntrada = () => {
           </legend>
           <Autocomplete
             items={products}
-            getItemValue={(item) => item.nombre}
+            getItemValue={(item) => item.nombre_prod}
             renderItem={(item, isHighlighted) => (
               <div
-                key={item.id}
+                key={item.id_prod}
                 style={{
                   background: isHighlighted ? "lightgray" : "white",
                   border: "1px solid #bbb",
@@ -83,14 +105,14 @@ const AgregarEntrada = () => {
                   borderRadius: "8px",
                 }}
               >
-                {`${item.id} - ${item.nombre} - ${item.marca}`}
+                {`${item.id_prod} - ${item.nombre_prod} - ${item.marca_prod}`}
               </div>
             )}
             value={productSelected}
             onChange={(e) => setProdSel(e.target.value)}
             onSelect={(val, item) => {
               setProdSel(val);
-              setidProdSel(item.id);
+              setidProdSel(item.id_prod);
             }}
             menuStyle={{
               outline: "none",
@@ -123,7 +145,22 @@ const AgregarEntrada = () => {
             onChange={(e) => setCantidad(e.target.value)}
           />
         </fieldset>
-
+        {showAlert && (
+          <Chip
+            close={false}
+            options={null}
+            style={{
+              width: "100%",
+              textAlign: "center",
+              backgroundColor: "#dc3545",
+              color: "#fff",
+              fontSize: "1.1rem",
+              margin: "20px 0px 0px 0px",
+            }}
+          >
+            {message}
+          </Chip>
+        )}
         <ButtonAgregar style={{ marginBottom: "2vh" }} onClick={handleSubmit}>
           Insertar
         </ButtonAgregar>

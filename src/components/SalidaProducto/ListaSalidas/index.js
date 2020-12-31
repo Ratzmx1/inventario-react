@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-// import TableRow from "./TableRow";
+import TableRow from "./TableRow";
 
 import { Row, Col, Select } from "react-materialize";
 import {
@@ -13,7 +13,36 @@ import {
   Link,
 } from "../../Styles";
 
+// Consulta
+import axios from "axios";
+import { baseUrl } from "../../../shared/baseUrl";
+
+// Rediux
+
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUser } from "../../../redux/ActionCreators";
+
 const Salidas = () => {
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
+
+  const [salidas, setSalidas] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/outs/productos_salida`, {
+        headers: { authorization: token },
+      })
+      .then((res) => res.data.data)
+      .then((data) => setSalidas(data))
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
+  }, []);
+
   return (
     <>
       <h1
@@ -66,19 +95,18 @@ const Salidas = () => {
         <thead className="">
           <tr>
             <Th>ID</Th>
-            <Th>Nª Orden</Th>
             <Th>Producto</Th>
             <Th>Cantidad</Th>
-            <Th>Proveedor</Th>
+            <Th>Rut analista</Th>
             <Th>Analista</Th>
             <Th>Fecha</Th>
             <Th>Acciones</Th>
           </tr>
         </thead>
         <tbody>
-          {/* {ordered.map((item) => (
+          {salidas.map((item) => (
             <TableRow key={item.id} item={item} />
-          ))} */}
+          ))}
         </tbody>
       </Table>
     </>

@@ -56,8 +56,7 @@ const Entradas = () => {
         item.nombre_prov.toUpperCase().includes(search.toUpperCase()) ||
         item.orden.toString().toUpperCase().includes(search.toUpperCase())
     );
-    console.log("SELECTED");
-    console.log(sel);
+
     setselected(sel);
   }, [products, search]);
 
@@ -73,7 +72,6 @@ const Entradas = () => {
       return 0;
     };
     let or;
-    console.log(order);
     switch (order) {
       case "1":
         or = selected.sort((a, b) => b.id - a.id);
