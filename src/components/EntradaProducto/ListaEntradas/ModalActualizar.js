@@ -2,42 +2,80 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-materialize";
 import { Input, Autocomplete } from "../../Styles";
 
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUser } from "../../../redux/ActionCreators";
+
+//Axios
+import axios from "axios";
+import { baseUrl } from "../../../shared/baseUrl";
+
 export const ModalActualizar = ({ item }) => {
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
+
   const [products, setProducts] = useState([]);
   const [productSelected, setProdSel] = useState();
   const [idProductSelected, setidProdSel] = useState();
+
+  const [proveedores, setProveedores] = useState([]);
+  const [provSel, setProvSel] = useState("");
+  const [idProvSel, setIdProvSel] = useState(0);
+
   const [nOrden, setNOrden] = useState(item.orden);
   const [cantidad, setCantidad] = useState();
 
   const handleSubmit = () => {
-    // window.location.reload();
+    axios
+      .post(
+        `${baseUrl}/entries/ActualizarInput`,
+        {
+          id: item.id,
+          orden: nOrden,
+          cantidad,
+          id_producto: idProductSelected,
+          id_proveedor: idProvSel,
+        },
+        {
+          headers: { authorization: token },
+        }
+      )
+      .then(() => {
+        alert(`Producto ${item.id} actualizado correctamente`);
+        window.location.reload();
+      });
   };
 
   useEffect(() => {
-    setProducts([
-      {
-        id: 1,
-        nombre: "Zapato",
-        subCategoria: 1,
-        marca: "Pequeña lulu",
-        stockMinimo: 50,
-      },
-      {
-        id: 2,
-        nombre: "Chala",
-        subCategoria: 1,
-        marca: "Pequeña lulu",
-        stockMinimo: 50,
-      },
-      {
-        id: 3,
-        nombre: "Skate",
-        subCategoria: 2,
-        marca: "ConiFuentesArt",
-        stockMinimo: 50,
-      },
-    ]);
+    axios
+      .get(`${baseUrl}/products/view`, {
+        headers: { authorization: token },
+      })
+      .then((res) => res.data.data)
+      .then((data) => setProducts(data.result))
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/providers/view`, {
+        headers: { authorization: token },
+      })
+      .then((res) => res.data.data)
+      .then((data) => setProveedores(data.result))
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
+  }, []);
+
   return (
     <Modal
       actions={[
@@ -126,7 +164,7 @@ export const ModalActualizar = ({ item }) => {
           </legend>
           <Autocomplete
             items={products}
-            getItemValue={(item) => item.nombre}
+            getItemValue={(item) => item.nombre_prod}
             renderItem={(item, isHighlighted) => (
               <div
                 style={{
@@ -137,14 +175,14 @@ export const ModalActualizar = ({ item }) => {
                   borderRadius: "4px",
                 }}
               >
-                {`${item.id} - ${item.nombre} - ${item.marca}`}
+                {`${item.id_prod} - ${item.nombre_prod} - ${item.marca_prod}`}
               </div>
             )}
             value={productSelected}
             onChange={(e) => setProdSel(e.target.value)}
             onSelect={(val, item) => {
               setProdSel(val);
-              setidProdSel(item.id);
+              setidProdSel(item.id_prod);
             }}
             menuStyle={{
               outline: "none",
@@ -193,8 +231,8 @@ export const ModalActualizar = ({ item }) => {
             Proveedor
           </legend>
           <Autocomplete
-            items={products}
-            getItemValue={(item) => item.nombre}
+            items={proveedores}
+            getItemValue={(item) => item.nombre_prov}
             renderItem={(item, isHighlighted) => (
               <div
                 style={{
@@ -205,14 +243,14 @@ export const ModalActualizar = ({ item }) => {
                   borderRadius: "4px",
                 }}
               >
-                {`${item.id} - ${item.nombre} - ${item.marca}`}
+                {`${item.id_prov} - ${item.nombre_prov} - ${item.telef_prov}`}
               </div>
             )}
-            value={productSelected}
-            onChange={(e) => setProdSel(e.target.value)}
+            value={provSel}
+            onChange={(e) => setProvSel(e.target.value)}
             onSelect={(val, item) => {
-              setProdSel(val);
-              setidProdSel(item.id);
+              setProvSel(val);
+              setIdProvSel(item.id_prov);
             }}
             menuStyle={{
               outline: "none",

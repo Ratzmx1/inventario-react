@@ -12,73 +12,52 @@ import {
   Link,
 } from "../../Styles";
 
+// Consulta
+import axios from "axios";
+import { baseUrl } from "../../../shared/baseUrl";
+
+// Rediux
+
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUser } from "../../../redux/ActionCreators";
+
 const Entradas = () => {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      orden: 752085,
-      producto: "Zapato",
-      cantidad: 150,
-      proveedor: "Camila Lulu",
-      analista: "Camila Flores",
-      fecha: "2020/12/02",
-    },
-  ]);
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
+
+  const [products, setProducts] = useState([]);
   const [selected, setselected] = useState([]);
   const [search, setSearch] = useState("");
-  const [order, setOrder] = useState();
+  const [order, setOrder] = useState("1");
   const [ordered, setOrdered] = useState([]);
 
   useEffect(() => {
-    setProducts([
-      {
-        id: 1,
-        orden: 752085,
-        producto: "Zapato",
-        cantidad: 150,
-        proveedor: "Camila Lulu",
-        analista: "Camila Flores",
-        fecha: "2020/12/02",
-      },
-      {
-        id: 2,
-        orden: 752085,
-        producto: "Botin",
-        cantidad: 150,
-        proveedor: "Camila Lulu",
-        analista: "Camila Flores",
-        fecha: "2020/12/02",
-      },
-      {
-        id: 3,
-        orden: 752085,
-        producto: "Chala Zico",
-        cantidad: 150,
-        proveedor: "Camila Lulu",
-        analista: "Camila Flores",
-        fecha: "2020/12/02",
-      },
-      {
-        id: 4,
-        orden: 752055,
-        producto: "Skate",
-        cantidad: 150,
-        proveedor: "ConiFuentesArt",
-        analista: "Enzo Pigatti",
-        fecha: "2020/06/29",
-      },
-    ]);
+    axios
+      .get(`${baseUrl}/entries/view`, { headers: { authorization: token } })
+      .then((res) => res.data)
+      .then((response) => {
+        const lista = response.data.result.sort((a, b) => a.id - b.id);
+        setProducts(lista);
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
   }, []);
 
   useEffect(() => {
     const sel = products.filter(
       (item) =>
-        item.fecha.toUpperCase().includes(search.toUpperCase()) ||
-        item.producto.toUpperCase().includes(search.toUpperCase()) ||
-        item.analista.toUpperCase().includes(search.toUpperCase()) ||
-        item.proveedor.toUpperCase().includes(search.toUpperCase()) ||
+        // item.fecha.toUpperCase().includes(search.toUpperCase()) ||
+        item.nombre_prod.toUpperCase().includes(search.toUpperCase()) ||
+        item.nombre_user.toUpperCase().includes(search.toUpperCase()) ||
+        item.nombre_prov.toUpperCase().includes(search.toUpperCase()) ||
         item.orden.toString().toUpperCase().includes(search.toUpperCase())
     );
+    console.log("SELECTED");
+    console.log(sel);
     setselected(sel);
   }, [products, search]);
 
@@ -94,6 +73,7 @@ const Entradas = () => {
       return 0;
     };
     let or;
+    console.log(order);
     switch (order) {
       case "1":
         or = selected.sort((a, b) => b.id - a.id);
@@ -102,31 +82,31 @@ const Entradas = () => {
         or = selected.sort((a, b) => a.id - b.id);
         break;
       case "3":
-        or = selected.sort((a, b) => b.order - a.order);
+        or = selected.sort((a, b) => b.orden - a.orden);
         break;
       case "4":
-        or = selected.sort((a, b) => a.order - b.order);
+        or = selected.sort((a, b) => a.orden - b.orden);
         break;
       case "5":
         or = selected.sort((a, b) =>
-          compare(b.producto.toUpperCase(), a.producto.toUpperCase())
+          compare(b.nombre_prod.toUpperCase(), a.nombre_prod.toUpperCase())
         );
         break;
       case "6":
         or = selected.sort((a, b) =>
-          compare(a.producto.toUpperCase(), b.producto.toUpperCase())
+          compare(a.nombre_prod.toUpperCase(), b.nombre_prod.toUpperCase())
         );
         break;
-      case "7":
-        or = selected.sort((a, b) =>
-          compare(new Date(a.fecha), new Date(b.fecha))
-        );
-        break;
-      case "8":
-        or = selected.sort((a, b) =>
-          compare(new Date(b.fecha), new Date(a.fecha))
-        );
-        break;
+      // case "7":
+      //   or = selected.sort((a, b) =>
+      //     compare(new Date(a.fecha), new Date(b.fecha))
+      //   );
+      //   break;
+      // case "8":
+      //   or = selected.sort((a, b) =>
+      //     compare(new Date(b.fecha), new Date(a.fecha))
+      //   );
+      //   break;
       default:
         or = selected;
         break;
@@ -162,8 +142,8 @@ const Entradas = () => {
             <option value="4">Orden Descendente</option>
             <option value="5">Nombre Ascendente</option>
             <option value="6">Nombre Descendente</option>
-            <option value="7">Fecha Ascendente</option>
-            <option value="8">Fecha Descendente</option>
+            {/* <option value="7">Fecha Ascendente</option>
+            <option value="8">Fecha Descendente</option> */}
           </Select>
         </Col>
         <Col s={3}>

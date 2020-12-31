@@ -3,41 +3,91 @@ import {
   ButtonAgregar,
   CardContainer,
   Input,
-  SearchContainer,
   Autocomplete,
 } from "../../Styles";
 
-const AgregarEntrada = () => {
-  const [products, setProducts] = useState([]);
-  const [productSelected, setProdSel] = useState();
-  const [idProductSelected, setidProdSel] = useState();
+import { baseUrl } from "../../../shared/baseUrl";
+import axios from "axios";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUser } from "../../../redux/ActionCreators";
+
+const AgregarEntrada = () => {
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
+
+  const [products, setProducts] = useState([]);
+  const [productSelected, setProdSel] = useState("");
+  const [idProductSelected, setidProdSel] = useState(0);
+
+  const [proveedores, setProveedores] = useState([]);
+  const [provSel, setProvSel] = useState("");
+  const [idProvSel, setIdProvSel] = useState(0);
+
+  const [orden, setOrden] = useState(0);
+  const [cantidad, setCantidad] = useState(0);
+
+  const handleSubmit = () => {
+    const norden = parseInt(orden);
+    const cant = parseInt(cantidad);
+    axios
+      .post(
+        `${baseUrl}/entries/input`,
+        {
+          orden: norden,
+          cantidad: cant,
+          id_producto: idProductSelected,
+          id_proveedor: idProvSel,
+        },
+        { headers: { authorization: token } }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          alert(response.data.message);
+          window.location.replace("/entradas");
+        }
+        console.log(response);
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
+  };
+
+  // CONSULTA PROVEEDORES
   useEffect(() => {
-    setProducts([
-      {
-        id: 1,
-        nombre: "Zapato",
-        subCategoria: 1,
-        marca: "Pequeña lulu",
-        stockMinimo: 50,
-      },
-      {
-        id: 2,
-        nombre: "Chala",
-        subCategoria: 1,
-        marca: "Pequeña lulu",
-        stockMinimo: 50,
-      },
-      {
-        id: 3,
-        nombre: "Skate",
-        subCategoria: 2,
-        marca: "ConiFuentesArt",
-        stockMinimo: 50,
-      },
-    ]);
+    axios
+      .get(`${baseUrl}/providers/view`, {
+        headers: { authorization: token },
+      })
+      .then((res) => res.data.data)
+      .then((data) => setProveedores(data.result))
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
   }, []);
-  console.log(idProductSelected);
+
+  // CONSULTA PRODUCTOS
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/products/view`, {
+        headers: { authorization: token },
+      })
+      .then((res) => res.data.data)
+      .then((data) => setProducts(data.result))
+      .catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
+  }, []);
+
   return (
     <CardContainer>
       <h1
@@ -63,7 +113,11 @@ const AgregarEntrada = () => {
           <legend style={{ padding: "0px 5px", color: "#aaa" }}>
             Numero de orden
           </legend>
-          <Input type="number" />
+          <Input
+            type="number"
+            value={orden}
+            onChange={(e) => setOrden(e.target.value)}
+          />
         </fieldset>
         <fieldset
           style={{
@@ -77,7 +131,7 @@ const AgregarEntrada = () => {
           </legend>
           <Autocomplete
             items={products}
-            getItemValue={(item) => item.nombre}
+            getItemValue={(item) => item.nombre_prod}
             renderItem={(item, isHighlighted) => (
               <div
                 style={{
@@ -87,15 +141,16 @@ const AgregarEntrada = () => {
                   padding: "2px 10px",
                   borderRadius: "4px",
                 }}
+                key={item.id_prod}
               >
-                {`${item.id} - ${item.nombre} - ${item.marca}`}
+                {`${item.id_prod} - ${item.nombre_prod} - ${item.marca_prod}`}
               </div>
             )}
             value={productSelected}
             onChange={(e) => setProdSel(e.target.value)}
             onSelect={(val, item) => {
               setProdSel(val);
-              setidProdSel(item.id);
+              setidProdSel(item.id_prod);
             }}
             menuStyle={{
               outline: "none",
@@ -123,11 +178,12 @@ const AgregarEntrada = () => {
           <legend style={{ padding: "0px 5px", color: "#aaa" }}>
             Cantidad
           </legend>
-          <Input type="number" />
+          <Input
+            type="number"
+            value={cantidad}
+            onChange={(e) => setCantidad(e.target.value)}
+          />
         </fieldset>
-        {/* <SearchContainer>
-          <Input type="number" placeholder="Cantidad" />
-        </SearchContainer> */}
 
         <fieldset
           style={{
@@ -140,8 +196,8 @@ const AgregarEntrada = () => {
             Proveedor
           </legend>
           <Autocomplete
-            items={products}
-            getItemValue={(item) => item.nombre}
+            items={proveedores}
+            getItemValue={(item) => item.nombre_prov}
             renderItem={(item, isHighlighted) => (
               <div
                 style={{
@@ -151,15 +207,16 @@ const AgregarEntrada = () => {
                   padding: "2px 10px",
                   borderRadius: "4px",
                 }}
+                key={item.id_prov}
               >
-                {`${item.id} - ${item.nombre} - ${item.marca}`}
+                {`${item.id_prov} - ${item.nombre_prov} - ${item.telef_prov}`}
               </div>
             )}
-            value={productSelected}
-            onChange={(e) => setProdSel(e.target.value)}
+            value={provSel}
+            onChange={(e) => setProvSel(e.target.value)}
             onSelect={(val, item) => {
-              setProdSel(val);
-              setidProdSel(item.id);
+              setProvSel(val);
+              setIdProvSel(item.id_prov);
             }}
             menuStyle={{
               outline: "none",
@@ -177,7 +234,9 @@ const AgregarEntrada = () => {
           />
         </fieldset>
 
-        <ButtonAgregar style={{ marginBottom: "2vh" }}>Insertar</ButtonAgregar>
+        <ButtonAgregar style={{ marginBottom: "2vh" }} onClick={handleSubmit}>
+          Insertar
+        </ButtonAgregar>
       </div>
     </CardContainer>
   );

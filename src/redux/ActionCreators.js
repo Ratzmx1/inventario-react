@@ -1,11 +1,17 @@
 import { SET_TOKEN, SET_USER } from "./ActionTypes";
 
-export const setToken = (token) => ({
-  type: SET_TOKEN,
-  payload: token,
-});
+export const setToken = (token) => {
+  localStorage.setItem("token", token);
+  return {
+    type: SET_TOKEN,
+    payload: token,
+  };
+};
 
-export const setUser = (user) => ({
-  type: SET_USER,
-  payload: user,
-});
+export const setUser = (user) => {
+  localStorage.setItem("user", JSON.stringify(user));
+  return {
+    type: SET_USER,
+    payload: user,
+  };
+};

@@ -1,7 +1,18 @@
 import React from "react";
 import { Button, Modal } from "react-materialize";
 
+// AXIOS
+import axios from "axios";
+import { baseUrl } from "../../../shared/baseUrl";
+
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUser } from "../../../redux/ActionCreators";
+
+
 export const ModalEliminar = ({ item }) => {
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch()
   return (
     <Modal
       actions={[
@@ -26,9 +37,21 @@ export const ModalEliminar = ({ item }) => {
             borderRadius: "8px",
           }}
           modal="confirm"
-          onClick={async () => {
-            await console.log("Deleting item to the Database");
-            window.location.reload();
+          onClick={() => {
+            axios
+              .post(
+                `${baseUrl}/entries/EliminarInput`,
+                { id: item.id },
+                { headers: { authorization: token } }
+              )
+              .then(() => {
+                window.location.reload();
+              }).catch((e) => {
+        if (e.response.status === 401) {
+          dispatch(setToken(""));
+          dispatch(setUser({}));
+        }
+      });
           }}
           node="button"
           waves="green"
@@ -70,10 +93,10 @@ export const ModalEliminar = ({ item }) => {
         <ul>
           <li>{`ID:        ${item.id}`}</li>
           <li>{`N° Orden:  ${item.orden}`}</li>
-          <li>{`Nombre:    ${item.producto}`}</li>
+          <li>{`Nombre:    ${item.nombre_prod}`}</li>
           <li>{`Fecha:     ${item.fecha}`}</li>
           <li>{`Cantidad:  ${item.cantidad}`}</li>
-          <li>{`Proveedor: ${item.proveedor}`}</li>
+          <li>{`Proveedor: ${item.nombre_prov}`}</li>
         </ul>
       </div>
     </Modal>

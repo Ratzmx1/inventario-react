@@ -8,10 +8,10 @@ const TableRow = ({ item }) => {
     <tr key={item.id}>
       <Td>{item.id}</Td>
       <Td>{item.orden}</Td>
-      <Td>{item.producto}</Td>
+      <Td>{item.nombre_prod}</Td>
       <Td>{item.cantidad}</Td>
-      <Td>{item.proveedor}</Td>
-      <Td>{item.analista}</Td>
+      <Td>{item.nombre_prov}</Td>
+      <Td>{item.nombre_user}</Td>
       <Td>{item.fecha}</Td>
       <Td style={{ width: "12vw" }}>
         <ModalActualizar item={item} />
