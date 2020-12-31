@@ -25,9 +25,7 @@ const NavBar = () => {
         <Link to="/">Subcategorias</Link>
         <Link to="/">Categorias</Link>
         <Link to="/">Proveedores</Link>
-        <Link to="/logout">
-          <Icon>account_circle</Icon>
-        </Link>
+        <Link to="/logout">Cerrar Sesion</Link>
       </Navbar>
     );
   } else if (user.rol === "ANALISTA") {
@@ -46,9 +44,7 @@ const NavBar = () => {
       >
         <Link to="/entradas">Entrada de productos</Link>
         <Link to="/salidas">Salida de productos</Link>
-        <Link to="/logout">
-          <Icon>account_circle</Icon>
-        </Link>
+        <Link to="/logout">Cerrar Sesion</Link>
       </Navbar>
     );
   }
