@@ -43,12 +43,10 @@ const Login = () => {
       })
       .catch((e) => {
         if (e.response) {
-          Swal.fire("Success", `${e.response.data.message}`, "success").then(
-            () => {
-              dispatch(setToken(""));
-              dispatch(setUser({}));
-            }
-          );
+          Swal.fire("Error", `${e.response.data.message}`, "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
           setLogged("-1");
           setMessage(e.response.data.message);
         }
