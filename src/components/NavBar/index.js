@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { Navbar, Icon } from "react-materialize";
 import { useSelector } from "react-redux";
 
+import Swal from "sweetalert2";
+
 const NavBar = () => {
   const user = useSelector((state) => state.user);
   if (user.rol === "ADMINISTRADOR") {
@@ -25,7 +27,14 @@ const NavBar = () => {
         <Link to="/">Sub Categorías</Link>
         <Link to="/">Categorías</Link>
         <Link to="/">Proveedores</Link>
-        <Link to="/logout">Cerrar Sesión</Link>
+        <Link
+          to="/logout"
+          onClick={() => {
+            Swal.fire("Logout", "Sesión cerrada correctamente", "info");
+          }}
+        >
+          Cerrar Sesión
+        </Link>
       </Navbar>
     );
   } else if (user.rol === "ANALISTA") {
@@ -44,7 +53,14 @@ const NavBar = () => {
       >
         <Link to="/entradas">Entrada de productos</Link>
         <Link to="/salidas">Salida de productos</Link>
-        <Link to="/logout">Cerrar Sesión</Link>
+        <Link
+          to="/logout"
+          onClick={() => {
+            Swal.fire("Logout", "Sesión cerrada correctamente", "info");
+          }}
+        >
+          Cerrar Sesión
+        </Link>
       </Navbar>
     );
   }

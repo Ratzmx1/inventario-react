@@ -15,7 +15,9 @@ import { setToken, setUser } from "../../redux/ActionCreators";
 
 // axios
 import Axios from "axios";
-import { baseUrl } from "../../shared/";
+import { baseUrl } from "../../shared/baseUrl";
+
+import Swal from "sweetalert2";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -31,18 +33,22 @@ const Login = () => {
         return res.data;
       })
       .then(({ data }) => {
-        dispatch(setToken(data.token));
-        dispatch(setUser(data.user));
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        Swal.fire("Success", "Sesión iniciada correctamente", "success").then(
+          () => {
+            dispatch(setToken(data.token));
+            dispatch(setUser(data.user));
+          }
+        );
         setLogged("1");
       })
       .catch((e) => {
         if (e.response) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
-          localStorage.setItem("token", "");
-          localStorage.setItem("user", JSON.stringify({}));
+          Swal.fire("Success", `${e.response.data.message}`, "success").then(
+            () => {
+              dispatch(setToken(""));
+              dispatch(setUser({}));
+            }
+          );
           setLogged("-1");
           setMessage(e.response.data.message);
         }

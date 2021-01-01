@@ -10,6 +10,8 @@ import { baseUrl } from "../../shared/baseUrl";
 
 import { CardContainer, Autocomplete, ButtonAgregar, Input } from "../Styles";
 
+import Swal from "sweetalert2";
+
 const AgregarProducto = () => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
@@ -38,11 +40,22 @@ const AgregarProducto = () => {
         }
       )
       .then(() => {
-        alert(`Producto Registrado Correctamente`);
-        window.location.reload();
+        Swal.fire(
+          "Success",
+          "Producto registrado correctamente",
+          "success"
+        ).then(() => window.location.reload());
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
+        }
       });
   };
-  console.log(SubCategories);
+
   useEffect(() => {
     axios
       .get(`${baseUrl}/subcategories/view`, {

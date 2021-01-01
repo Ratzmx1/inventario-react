@@ -22,11 +22,17 @@ import { baseUrl } from "../../../shared/baseUrl";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setUser } from "../../../redux/ActionCreators";
 
+import { calcular } from "../../../shared/formateaRut";
+
 const Salidas = () => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
 
   const [salidas, setSalidas] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [search, setSearch] = useState("");
+  const [order, setOrder] = useState("1");
+  const [ordered, setOrdered] = useState([]);
 
   useEffect(() => {
     axios
@@ -34,7 +40,7 @@ const Salidas = () => {
         headers: { authorization: token },
       })
       .then((res) => res.data.data)
-      .then((data) => setSalidas(data))
+      .then((data) => setSalidas(data.sort((a, b) => a.id - b.id)))
       .catch((e) => {
         if (e.response.status === 401) {
           dispatch(setToken(""));
@@ -42,6 +48,57 @@ const Salidas = () => {
         }
       });
   }, []);
+
+  useEffect(() => {
+    const sel = salidas.filter(
+      (item) =>
+        item.fecha.includes(search) ||
+        `${item.rut}-${calcular(item.rut)}`.includes(search) ||
+        item.nombre.toUpperCase().includes(search.toUpperCase()) ||
+        item.id.toString().toUpperCase().includes(search.toUpperCase()) ||
+        (item.nombres + item.apellidos)
+          .toUpperCase()
+          .includes(search.toUpperCase())
+    );
+    setSelected(sel);
+  }, [salidas, search]);
+
+  useEffect(() => {
+    const compare = (a, b) => {
+      a = a.toString().trim().toUpperCase();
+      b = b.toString().trim().toUpperCase();
+      if (a > b) {
+        return 1;
+      } else if (a < b) {
+        return -1;
+      }
+      return 0;
+    };
+
+    let or;
+    switch (order) {
+      case "1":
+        or = selected.sort((a, b) => b.id - a.id);
+        break;
+      case "2":
+        or = selected.sort((a, b) => a.id - b.id);
+        break;
+      case "3":
+        or = selected.sort((a, b) =>
+          compare(b.nombre.toUpperCase(), a.nombre.toUpperCase())
+        );
+        break;
+      case "4":
+        or = selected.sort((a, b) =>
+          compare(a.nombre.toUpperCase(), b.nombre.toUpperCase())
+        );
+        break;
+      default:
+        or = selected;
+        break;
+    }
+    setOrdered(or);
+  }, [order, selected]);
 
   return (
     <>
@@ -60,26 +117,22 @@ const Salidas = () => {
       <Row style={{ height: "35px" }}>
         <Col s={2} offset="s4">
           <Select
-          // onChange={(v) => {
-          //   setOrder(v.target.value);
-          // }}
-          // value={order}
+            onChange={(v) => {
+              setOrder(v.target.value);
+            }}
+            value={order}
           >
             <option value="1">ID Ascendente</option>
             <option value="2">ID Descendente</option>
-            <option value="3">Orden Ascendente</option>
-            <option value="4">Orden Descendente</option>
-            <option value="5">Nombre Ascendente</option>
-            <option value="6">Nombre Descendente</option>
-            <option value="7">Fecha Ascendente</option>
-            <option value="8">Fecha Descendente</option>
+            <option value="3">Nombre Ascendente</option>
+            <option value="4">Nombre Descendente</option>
           </Select>
         </Col>
         <Col s={3}>
           <SearchContainer>
             <Input
-              // value={search}
-              // onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Búsqueda"
             />
             <Icon className="fas fa-search" />
@@ -104,7 +157,7 @@ const Salidas = () => {
           </tr>
         </thead>
         <tbody>
-          {salidas.map((item) => (
+          {ordered.map((item) => (
             <TableRow key={item.id} item={item} />
           ))}
         </tbody>

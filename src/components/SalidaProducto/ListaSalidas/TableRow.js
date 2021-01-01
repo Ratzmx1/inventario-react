@@ -2,14 +2,18 @@ import React from "react";
 import { Td } from "../../Styles";
 import { Button } from "react-materialize";
 
+// Rut
+
+import { calcular } from "../../../shared/formateaRut";
+
 const TableRow = ({ item }) => {
   return (
     <tr key={item.id}>
       <Td>{item.id}</Td>
       <Td>{item.nombre}</Td>
       <Td>{item.cantidad}</Td>
-      <Td>{item.rut}</Td>
-      <Td>{item.nombres}</Td>
+      <Td>{`${item.rut}-${calcular(item.rut)}`}</Td>
+      <Td>{`${item.nombres} ${item.apellidos} `}</Td>
       <Td>{item.fecha}</Td>
       <Td style={{ width: "12vw" }}>
         <Button

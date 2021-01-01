@@ -13,6 +13,8 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setUser } from "../../../redux/ActionCreators";
 
+import Swal from "sweetalert2";
+
 const AgregarEntrada = () => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
@@ -51,20 +53,27 @@ const AgregarEntrada = () => {
           headers: { authorization: token },
         }
       )
-      .then(() => {
-        alert("Salida registrada correctamente");
-        window.location.replace("/salidas");
+      .then((response) => {
+        if (response.status === 200) {
+          Swal.fire(
+            "Success",
+            "Salida de producto registrada correctamente",
+            "success"
+          ).then(() => window.location.replace("/salidas"));
+        }
+        console.log(response);
       })
       .catch((e) => {
         if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
         } else if (e.response.status === 404) {
           setMessage(e.response.data.mensaje);
           setShowAlert(true);
         }
       });
-    console.log(idProductSelected, parseInt(cantidad, 10));
   };
 
   return (

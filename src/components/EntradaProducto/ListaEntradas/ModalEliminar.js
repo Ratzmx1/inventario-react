@@ -9,10 +9,11 @@ import { baseUrl } from "../../../shared/baseUrl";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setUser } from "../../../redux/ActionCreators";
 
+import Swal from "sweetalert2";
 
 export const ModalEliminar = ({ item }) => {
   const token = useSelector((state) => state.token);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <Modal
       actions={[
@@ -45,13 +46,20 @@ export const ModalEliminar = ({ item }) => {
                 { headers: { authorization: token } }
               )
               .then(() => {
-                window.location.reload();
-              }).catch((e) => {
-        if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
-        }
-      });
+                Swal.fire(
+                  "Success",
+                  `Entrada de producto ${item.id} eliminado correctamente`,
+                  "success"
+                ).then(() => window.location.reload());
+              })
+              .catch((e) => {
+                if (e.response.status === 401) {
+                  Swal.fire("Error", "Unauthorized", "error").then(() => {
+                    dispatch(setToken(""));
+                    dispatch(setUser({}));
+                  });
+                }
+              });
           }}
           node="button"
           waves="green"

@@ -10,6 +10,8 @@ import { setToken, setUser } from "../../../redux/ActionCreators";
 import axios from "axios";
 import { baseUrl } from "../../../shared/baseUrl";
 
+import Swal from "sweetalert2";
+
 export const ModalActualizar = ({ item }) => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
@@ -41,8 +43,21 @@ export const ModalActualizar = ({ item }) => {
         }
       )
       .then(() => {
-        alert(`Producto ${item.id} actualizado correctamente`);
-        window.location.reload();
+        Swal.fire(
+          "Success",
+          `Producto ${item.id} actualizado correctamente`,
+          "success"
+        ).then(() => window.location.reload());
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
+        } else {
+          console.log(e.response);
+        }
       });
   };
 
@@ -55,8 +70,10 @@ export const ModalActualizar = ({ item }) => {
       .then((data) => setProducts(data.result))
       .catch((e) => {
         if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
         }
       });
   }, []);
@@ -70,8 +87,10 @@ export const ModalActualizar = ({ item }) => {
       .then((data) => setProveedores(data.result))
       .catch((e) => {
         if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
         }
       });
   }, []);

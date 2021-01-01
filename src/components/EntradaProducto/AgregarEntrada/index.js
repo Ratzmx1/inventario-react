@@ -12,13 +12,15 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setUser } from "../../../redux/ActionCreators";
 
+import Swal from "sweetalert2";
+
 const AgregarEntrada = () => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState([]);
   const [productSelected, setProdSel] = useState("");
-  const [idProductSelected, setidProdSel] = useState(0);
+  const [idProductSelected, setIdProdSel] = useState(0);
 
   const [proveedores, setProveedores] = useState([]);
   const [provSel, setProvSel] = useState("");
@@ -43,15 +45,20 @@ const AgregarEntrada = () => {
       )
       .then((response) => {
         if (response.status === 200) {
-          alert(response.data.message);
-          window.location.replace("/entradas");
+          Swal.fire(
+            "Success",
+            "Entrada de producto registrada correctamente",
+            "success"
+          ).then(() => window.location.replace("/entradas"));
         }
         console.log(response);
       })
       .catch((e) => {
         if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
         }
       });
   };
@@ -66,8 +73,10 @@ const AgregarEntrada = () => {
       .then((data) => setProveedores(data.result))
       .catch((e) => {
         if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
         }
       });
   }, []);
@@ -82,8 +91,10 @@ const AgregarEntrada = () => {
       .then((data) => setProducts(data.result))
       .catch((e) => {
         if (e.response.status === 401) {
-          dispatch(setToken(""));
-          dispatch(setUser({}));
+          Swal.fire("Error", "Unauthorized", "error").then(() => {
+            dispatch(setToken(""));
+            dispatch(setUser({}));
+          });
         }
       });
   }, []);
@@ -150,7 +161,7 @@ const AgregarEntrada = () => {
             onChange={(e) => setProdSel(e.target.value)}
             onSelect={(val, item) => {
               setProdSel(val);
-              setidProdSel(item.id_prod);
+              setIdProdSel(item.id_prod);
             }}
             menuStyle={{
               outline: "none",
