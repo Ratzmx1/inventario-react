@@ -32,7 +32,7 @@ const AgregarEntrada = () => {
   const handleSubmit = () => {
     const norden = parseInt(orden);
     const cant = parseInt(cantidad);
-    if (cantidad <= 0) {
+    if (cant <= 0) {
       Swal.fire("Error", "La cantidad debe ser positiva", "error");
     } else {
       axios

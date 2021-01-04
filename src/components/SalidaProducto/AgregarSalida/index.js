@@ -92,7 +92,7 @@ const AgregarEntrada = () => {
           fontSize: "3rem",
         }}
       >
-        Registrar entrada de productos
+        Registrar salida de productos
       </h1>
       <div style={{ marginLeft: "15%", marginRight: "15%" }}>
         <fieldset
