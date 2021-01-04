@@ -45,35 +45,39 @@ const AgregarEntrada = () => {
   }, []);
 
   const handleSubmit = () => {
-    axios
-      .post(
-        `${baseUrl}/outs/sacar_producto`,
-        { id_producto: idProductSelected, cantidad },
-        {
-          headers: { authorization: token },
-        }
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          Swal.fire(
-            "Success",
-            "Salida de producto registrada correctamente",
-            "success"
-          ).then(() => window.location.replace("/salidas"));
-        }
-        console.log(response);
-      })
-      .catch((e) => {
-        if (e.response.status === 401) {
-          Swal.fire("Error", "Unauthorized", "error").then(() => {
-            dispatch(setToken(""));
-            dispatch(setUser({}));
-          });
-        } else if (e.response.status === 404) {
-          setMessage(e.response.data.mensaje);
-          setShowAlert(true);
-        }
-      });
+    if (cantidad <= 0) {
+      Swal.fire("Error", "La cantidad debe ser positiva", "error");
+    } else {
+      axios
+        .post(
+          `${baseUrl}/outs/sacar_producto`,
+          { id_producto: idProductSelected, cantidad },
+          {
+            headers: { authorization: token },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire(
+              "Success",
+              "Salida de producto registrada correctamente",
+              "success"
+            ).then(() => window.location.replace("/salidas"));
+          }
+          console.log(response);
+        })
+        .catch((e) => {
+          if (e.response.status === 401) {
+            Swal.fire("Error", "Unauthorized", "error").then(() => {
+              dispatch(setToken(""));
+              dispatch(setUser({}));
+            });
+          } else if (e.response.status === 404) {
+            setMessage(e.response.data.mensaje);
+            setShowAlert(true);
+          }
+        });
+    }
   };
 
   return (

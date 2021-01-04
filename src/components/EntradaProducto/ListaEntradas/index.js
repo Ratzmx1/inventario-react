@@ -29,7 +29,7 @@ const Entradas = () => {
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState("");
-  const [order, setOrder] = useState("1");
+  const [order, setOrder] = useState("2");
   const [ordered, setOrdered] = useState([]);
 
   useEffect(() => {
@@ -74,6 +74,7 @@ const Entradas = () => {
       return 0;
     };
     let or;
+    console.log(order);
     switch (order) {
       case "1":
         or = selected.sort((a, b) => b.id - a.id);
@@ -101,6 +102,7 @@ const Entradas = () => {
         or = selected;
         break;
     }
+    console.log(or);
     setOrdered(or);
   }, [order, selected]);
 

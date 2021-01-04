@@ -55,8 +55,6 @@ export const ModalActualizar = ({ item }) => {
             dispatch(setToken(""));
             dispatch(setUser({}));
           });
-        } else {
-          console.log(e.response);
         }
       });
   };

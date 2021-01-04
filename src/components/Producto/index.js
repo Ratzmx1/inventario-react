@@ -25,35 +25,39 @@ const AgregarProducto = () => {
   const [nombre, setNombre] = useState("");
 
   const handleSubmit = () => {
-    axios
-      .post(
-        `${baseUrl}/products/agregar`,
-        {
-          nombre,
-          id_sub_cat: idSubCat,
-          marca,
-          stock: 0,
-          stock_min: stockMin,
-        },
-        {
-          headers: { authorization: token },
-        }
-      )
-      .then(() => {
-        Swal.fire(
-          "Success",
-          "Producto registrado correctamente",
-          "success"
-        ).then(() => window.location.reload());
-      })
-      .catch((e) => {
-        if (e.response.status === 401) {
-          Swal.fire("Error", "Unauthorized", "error").then(() => {
-            dispatch(setToken(""));
-            dispatch(setUser({}));
-          });
-        }
-      });
+    if (stockMin <= 0) {
+      Swal.fire("Error", "El stock minimo debe ser positivo", "error");
+    } else {
+      axios
+        .post(
+          `${baseUrl}/products/agregar`,
+          {
+            nombre,
+            id_sub_cat: idSubCat,
+            marca,
+            stock: 0,
+            stock_min: stockMin,
+          },
+          {
+            headers: { authorization: token },
+          }
+        )
+        .then(() => {
+          Swal.fire(
+            "Success",
+            "Producto registrado correctamente",
+            "success"
+          ).then(() => window.location.reload());
+        })
+        .catch((e) => {
+          if (e.response.status === 401) {
+            Swal.fire("Error", "Unauthorized", "error").then(() => {
+              dispatch(setToken(""));
+              dispatch(setUser({}));
+            });
+          }
+        });
+    }
   };
 
   useEffect(() => {

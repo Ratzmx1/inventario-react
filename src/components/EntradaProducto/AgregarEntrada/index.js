@@ -32,35 +32,39 @@ const AgregarEntrada = () => {
   const handleSubmit = () => {
     const norden = parseInt(orden);
     const cant = parseInt(cantidad);
-    axios
-      .post(
-        `${baseUrl}/entries/input`,
-        {
-          orden: norden,
-          cantidad: cant,
-          id_producto: idProductSelected,
-          id_proveedor: idProvSel,
-        },
-        { headers: { authorization: token } }
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          Swal.fire(
-            "Success",
-            "Entrada de producto registrada correctamente",
-            "success"
-          ).then(() => window.location.replace("/entradas"));
-        }
-        console.log(response);
-      })
-      .catch((e) => {
-        if (e.response.status === 401) {
-          Swal.fire("Error", "Unauthorized", "error").then(() => {
-            dispatch(setToken(""));
-            dispatch(setUser({}));
-          });
-        }
-      });
+    if (cantidad <= 0) {
+      Swal.fire("Error", "La cantidad debe ser positiva", "error");
+    } else {
+      axios
+        .post(
+          `${baseUrl}/entries/input`,
+          {
+            orden: norden,
+            cantidad: cant,
+            id_producto: idProductSelected,
+            id_proveedor: idProvSel,
+          },
+          { headers: { authorization: token } }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire(
+              "Success",
+              "Entrada de producto registrada correctamente",
+              "success"
+            ).then(() => window.location.replace("/entradas"));
+          }
+          console.log(response);
+        })
+        .catch((e) => {
+          if (e.response.status === 401) {
+            Swal.fire("Error", "Unauthorized", "error").then(() => {
+              dispatch(setToken(""));
+              dispatch(setUser({}));
+            });
+          }
+        });
+    }
   };
 
   // CONSULTA PROVEEDORES
